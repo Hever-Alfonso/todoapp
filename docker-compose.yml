@@ -1,0 +1,44 @@
+# =========================================================
+# docker-compose.yml
+# =========================================================
+# Este archivo define CÓMO se ejecutan los contenedores.
+#
+# Dockerfile      = cómo se construye la imagen (build time)
+# docker-compose  = cómo se ejecuta (run time)
+#
+# Aunque solo haya 1 servicio, Compose ayuda porque:
+# - Unifica el comando: docker compose up --build
+# - Mapea puertos (para abrir la app en el navegador)
+# - Maneja volúmenes (persistencia)
+# =========================================================
+
+services:
+  # -------------------------------------------------------
+  # Servicio WEB (Django)
+  # -------------------------------------------------------
+  web:
+    # build:
+    # - Construye la imagen usando el Dockerfile del directorio actual (.)
+    build: .
+
+    # ports:
+    # - "HOST:CONTENEDOR"
+    # - Expone el servidor Django al host.
+    # - Podrás abrir: http://localhost:8000
+    ports:
+      - "8000:8000"
+
+    # volumes:
+    # - sqlite_data: persistencia de la base de datos SQLite.
+    #   En settings.py configuramos SQLite para guardarse en:
+    #   /app/backend/db.sqlite3
+    volumes:
+      - sqlite_data:/app/backend
+
+# ---------------------------------------------------------
+# Volúmenes
+# ---------------------------------------------------------
+# Los volúmenes viven FUERA del contenedor.
+# El contenedor es efímero, el volumen NO.
+volumes:
+  sqlite_data:
